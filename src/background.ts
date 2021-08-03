@@ -3,10 +3,34 @@ import './polyfill'
 import { assert, isOnBeforeSendHeadersOption, isOnHeadersReceivedOption, logErrors } from './util'
 import { Message, PreviewMessage } from './messages'
 
+// TODO: Take 1st word on page and search
+
+browser.browserAction.onClicked.addListener(
+	logErrors(async tab => {
+		console.log('Page action invoked', { tab })
+		assert(tab?.id, 'Expected tab with ID')
+		if (!tab.url) {
+			console.log('No tab url detected')
+			return
+		}
+		const linkUrl = new URL('https://www.crunchbase.com/home')
+
+		allowIframe(tab, linkUrl)
+
+		console.log('Executing content script')
+		await browser.tabs.executeScript({ file: '/src/content.js' })
+		const message: PreviewMessage = {
+			method: 'preview',
+			linkUrl: linkUrl.href,
+		}
+		await browser.tabs.sendMessage(tab.id, message)
+	})
+)
+
 // Register context menu entry to open links in sidebar
 browser.contextMenus.create({
 	id: 'open-in-sidebar',
-	title: 'Open in sidebar',
+	title: 'Open in sidebar - clone',
 	contexts: ['link'],
 })
 
@@ -20,7 +44,7 @@ browser.contextMenus.onClicked.addListener(
 		if (!info.linkUrl) {
 			return
 		}
-		const linkUrl = new URL(info.linkUrl)
+		const linkUrl = new URL('https://www.crunchbase.com/home')
 
 		allowIframe(tab, linkUrl)
 
