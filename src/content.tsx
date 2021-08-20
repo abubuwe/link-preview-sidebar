@@ -9,7 +9,7 @@ browser.runtime.onMessage.addListener(
 		switch (message.method) {
 			case 'preview': {
 				const linkUrl = new URL(message.linkUrl)
-				await showSidebar(linkUrl)
+				await showSidebar(linkUrl, message.title)
 			}
 		}
 	})
@@ -35,7 +35,7 @@ window.addEventListener(
 	{ capture: true }
 )
 
-async function showSidebar(linkUrl: URL): Promise<void> {
+async function showSidebar(linkUrl: URL, searchTerm?: string): Promise<void> {
 	let existingSidebar = document.querySelector('#link-preview-sidebar')
 	const embedderUrl = new URL(browser.extension.getURL('/src/embedder.html'))
 
@@ -86,10 +86,6 @@ async function showSidebar(linkUrl: URL): Promise<void> {
 		// extension ensures that cookies (including SameSite=Lax) are sent for the URL the same as for a full page
 		// navigation, which would otherwise not be the case and would cause the preview to be broken.
 		const embedderIframe = sidebar.shadowRoot!.querySelector<HTMLIFrameElement>('#link-preview-sidebar-iframe')!
-		await new Promise<Event>(resolve => {
-			embedderIframe.addEventListener('load', resolve, { once: true })
-			embedderIframe.src = embedderUrl.href
-		})
 	}
 	const link = existingSidebar.shadowRoot!.querySelector<HTMLAnchorElement>('#link-preview-link')!
 	link.href = linkUrl.href

@@ -3,7 +3,7 @@
 	"name": "Link Preview Clone",
 	"description": "Preview links in a sidebar instead of a new tab.",
 	"version": "0.0.2",
-	"permissions": ["activeTab", "declarativeContent", "storage", "contextMenus", "webRequest", "webRequestBlocking", "tabs", "<all_urls>"],
+	"permissions": ["activeTab", "declarativeContent", "storage", "contextMenus", "webRequest", "webRequestBlocking", "tabs", "https://www.crunchbase.com/",  "<all_urls>"],
 	"icons": {
 		"128": "/images/icon.png"
 	},

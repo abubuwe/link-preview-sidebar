@@ -9,14 +9,20 @@ window.addEventListener('message', event => {
 			// We need to recreate the iframe so that the origin is "fresh" and will send Cookies properly with SameSite=Lax.
 			// For some reason updating the `src` of an existing iframe will not cause the Cookies for the updated origin to be sent.
 			document.querySelector<HTMLIFrameElement>('#preview-iframe')?.remove()
-			const iframe = document.createElement('iframe')
-			iframe.id = 'preview-iframe'
-			document.body.append(iframe)
-			iframe.src = message.linkUrl
+			const div = document.createElement('div')
+			div.id = 'preview-iframe'
+			document.body.append(div)
 			return
 		}
 		default: {
-			throw new Error('Unknown message ' + message.method)
+			switch (event.origin) {
+				case 'https://www.crunchbase.com': {
+					return
+				}
+				default: {
+					throw new Error('Unknown message ' + message.method)
+				}
+			}
 		}
 	}
 })

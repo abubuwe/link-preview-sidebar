@@ -1,6 +1,7 @@
 export interface PreviewMessage {
 	method: 'preview'
 	linkUrl: string
+	title?: string
 }
 export interface AllowIframeMessage {
 	method: 'allowIframe'
