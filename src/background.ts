@@ -1,3 +1,7 @@
+import axios from 'axios';
+import dotenv from "dotenv";
+dotenv.config();
+
 import './polyfill'
 
 import { assert, isOnBeforeSendHeadersOption, isOnHeadersReceivedOption, logErrors } from './util'
@@ -5,16 +9,61 @@ import { Message, PreviewMessage } from './messages'
 
 // TODO: Take 1st word on page and search
 
+async function getCrunchbaseUrl(domain: string) {
+	console.log("function started")
+	const response = await axios.post(`https://api.crunchbase.com/api/v4/searches/organizations`, 
+	{
+		"field_ids": [
+			"identifier",
+			"location_identifiers",
+			"short_description",
+			"rank_org"
+		],
+		"order": [
+			{
+				"field_id": "rank_org",
+				"sort": "asc"
+			}
+		],
+		"query": [
+			{
+				"type": "predicate",
+				"field_id": "website_url",
+				"operator_id": "domain_eq",
+				"values": [
+					domain
+				]
+			}
+		],
+		"limit": 50
+	},
+	{
+		headers: { 'X-cb-user-key':  process.env.CB_API_KEY },
+	});
+	console.log(response);
+	if (response.data.count === 1) {
+		return `https://www.crunchbase.com/organization/${response.data.entities[0].properties.identifier.permalink}`
+	}
+}
+
 browser.browserAction.onClicked.addListener(
 	logErrors(async tab => {
-		console.log('Page action invoked', { tab })
+
+		console.log('Browser action invoked', { tab })
 		assert(tab?.id, 'Expected tab with ID')
 		if (!tab.url) {
 			console.log('No tab url detected')
 			return
 		}
-		const linkUrl = new URL("https://www.crunchbase.com/organization/tyk-io")
+		const tabDomain = new URL(tab.url).hostname
+		console.log("function to be called")
+		const cbUrl = await getCrunchbaseUrl(tabDomain)
 
+		let linkUrl = new URL("https://www.crunchbase.com/organization/tyk-io")
+		if (cbUrl) {
+			linkUrl = new URL(cbUrl)
+		}
+		
 		allowIframe(tab, linkUrl)
 
 		console.log('Executing content script')
@@ -85,7 +134,7 @@ browser.runtime.onMessage.addListener(async (message: Message, sender) => {
 			return
 		}
 		default: {
-			throw new Error('Unknown message ' + message.method)
+			throw new Error('onMessage - Unknown message ' + message.method)
 		}
 	}
 })

@@ -16,7 +16,7 @@ window.addEventListener('message', event => {
 			return
 		}
 		default: {
-			throw new Error('Unknown message ' + message.method)
+			throw new Error('windowListener - Unknown message ' + message.method)
 		}
 	}
 })
