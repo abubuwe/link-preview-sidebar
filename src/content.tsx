@@ -2,7 +2,7 @@ import './polyfill'
 
 import { h, Fragment, SVGProps } from 'jsx-dom'
 import { logErrors } from './util'
-import { AllowIframeMessage, DisallowIframeMessage, Message, PreviewMessage } from './messages'
+import { AllowIframeMessage, DisallowIframeMessage, Message, PreviewMessage } from './util/messages'
 
 browser.runtime.onMessage.addListener(
 	logErrors(async (message: Message) => {
@@ -17,7 +17,7 @@ browser.runtime.onMessage.addListener(
 
 async function showSidebar(linkUrl: URL): Promise<void> {
 	let existingSidebar = document.querySelector('#link-preview-sidebar')
-	const embedderUrl = new URL(browser.extension.getURL('/src/embedder.html'))
+	const embedderUrl = new URL(browser.extension.getURL('/src/templates/embedder.html'))
 
 	if (!existingSidebar) {
 		const sidebar = <aside id="link-preview-sidebar" aria-label="Link preview" />
@@ -36,7 +36,7 @@ async function showSidebar(linkUrl: URL): Promise<void> {
 
 		sidebar.attachShadow({ mode: 'open', delegatesFocus: true }).append(
 			<>
-				<link href={browser.extension.getURL('/src/content.css')} rel="stylesheet" />
+				<link href={browser.extension.getURL('/src/templates/content.css')} rel="stylesheet" />
 				<div className="link-preview-top-bar">
 					<a
 						id="link-preview-link"

@@ -14,7 +14,7 @@
 		}
 	],
 	"browser_action": {},
-	"web_accessible_resources": ["src/content.tsx", "src/content.css", "src/embedder.html"],
+	"web_accessible_resources": ["src/content.tsx", "src/templates/*"],
 	"background": {
 		"scripts": ["src/background.ts"]
 	}
