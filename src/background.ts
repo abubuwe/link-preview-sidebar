@@ -1,5 +1,5 @@
 import axios from 'axios';
-import dotenv from "dotenv";
+import dotenv from 'dotenv';
 dotenv.config();
 
 import './polyfill'
@@ -10,32 +10,32 @@ import { Message, PreviewMessage } from './messages'
 // TODO: Take 1st word on page and search
 
 async function getCrunchbaseUrl(domain: string) {
-	console.log("function started")
-	const response = await axios.post(`https://api.crunchbase.com/api/v4/searches/organizations`, 
+	console.log('function started')
+	const response = await axios.post('https://api.crunchbase.com/api/v4/searches/organizations', 
 	{
-		"field_ids": [
-			"identifier",
-			"location_identifiers",
-			"short_description",
-			"rank_org"
+		'field_ids': [
+			'identifier',
+			'location_identifiers',
+			'short_description',
+			'rank_org'
 		],
-		"order": [
+		'order': [
 			{
-				"field_id": "rank_org",
-				"sort": "asc"
+				'field_id': 'rank_org',
+				'sort': 'asc'
 			}
 		],
-		"query": [
+		'query': [
 			{
-				"type": "predicate",
-				"field_id": "website_url",
-				"operator_id": "domain_eq",
-				"values": [
+				'type': 'predicate',
+				'field_id': 'website_url',
+				'operator_id': 'domain_eq',
+				'values': [
 					domain
 				]
 			}
 		],
-		"limit": 50
+		'limit': 50
 	},
 	{
 		headers: { 'X-cb-user-key':  process.env.CB_API_KEY },
@@ -56,10 +56,10 @@ browser.browserAction.onClicked.addListener(
 			return
 		}
 		const tabDomain = new URL(tab.url).hostname
-		console.log("function to be called")
+		console.log('function to be called')
 		const cbUrl = await getCrunchbaseUrl(tabDomain)
 
-		let linkUrl = new URL("https://www.crunchbase.com/organization/tyk-io")
+		let linkUrl = new URL('https://www.crunchbase.com/organization/tyk-io')
 		if (cbUrl) {
 			linkUrl = new URL(cbUrl)
 		}

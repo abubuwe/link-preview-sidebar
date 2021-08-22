@@ -8,6 +8,7 @@
 		"prettier": "prettier --check '**/*.{yml,ts,json}'",
 		"typecheck": "tsc -p .",
 		"eslint": "eslint 'src/**/*.ts'",
+		"eslint:fix": "eslint 'src/**/*.ts' --fix",
 		"build": "parcel build manifest.json --no-minify",
 		"watch": "parcel watch manifest.json --no-hmr",
 		"firefox:start": "web-ext run",
