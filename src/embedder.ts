@@ -1,4 +1,4 @@
-import { Message } from './messages'
+import { Message } from './util/messages'
 
 window.addEventListener('message', event => {
 	const message = event.data as Message

@@ -5,7 +5,7 @@ dotenv.config();
 import './polyfill'
 
 import { assert, isOnBeforeSendHeadersOption, isOnHeadersReceivedOption, logErrors } from './util'
-import { Message, PreviewMessage } from './messages'
+import { Message, PreviewMessage } from './util/messages'
 
 // TODO: Take 1st word on page and search
 
