@@ -76,37 +76,6 @@ browser.browserAction.onClicked.addListener(
 	})
 )
 
-// Register context menu entry to open links in sidebar
-browser.contextMenus.create({
-	id: 'open-in-sidebar',
-	title: 'Open in sidebar - clone',
-	contexts: ['link'],
-})
-
-browser.contextMenus.onClicked.addListener(
-	logErrors(async (info, tab) => {
-		console.log('Context menu action invoked', { info, tab })
-		if (info.menuItemId !== 'open-in-sidebar') {
-			return
-		}
-		assert(tab?.id, 'Expected tab with ID')
-		if (!info.linkUrl) {
-			return
-		}
-		const linkUrl = new URL(info.linkUrl)
-
-		allowIframe(tab, linkUrl)
-
-		console.log('Executing content script')
-		await browser.tabs.executeScript({ file: '/src/content.js' })
-		const message: PreviewMessage = {
-			method: 'preview',
-			linkUrl: linkUrl.href,
-		}
-		await browser.tabs.sendMessage(tab.id, message)
-	})
-)
-
 /**
  * Map from tabId:URL to function that removes all webRequest listeners again.
  * Keeps track of allowed iframes to not double-register listeners.
