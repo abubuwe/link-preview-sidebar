@@ -15,26 +15,6 @@ browser.runtime.onMessage.addListener(
 	})
 )
 
-// Open links in preview side bar when Alt key is held
-window.addEventListener(
-	'click',
-	logErrors(async event => {
-		if (event.altKey && event.target instanceof HTMLAnchorElement && event.target.href) {
-			event.preventDefault()
-			const linkUrl = new URL(event.target.href)
-			const message: AllowIframeMessage = {
-				method: 'allowIframe',
-				linkUrl: linkUrl.href,
-			}
-			console.log('Asking background page to allow URL in iframe', linkUrl.href)
-			await browser.runtime.sendMessage(message)
-			console.log('Allowed iframe, opening sidebar')
-			await showSidebar(linkUrl)
-		}
-	}),
-	{ capture: true }
-)
-
 async function showSidebar(linkUrl: URL): Promise<void> {
 	let existingSidebar = document.querySelector('#link-preview-sidebar')
 	const embedderUrl = new URL(browser.extension.getURL('/src/embedder.html'))
