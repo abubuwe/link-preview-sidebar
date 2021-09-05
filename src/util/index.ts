@@ -1,3 +1,5 @@
+import * as Sentry from '@sentry/browser';
+
 export const isOnBeforeSendHeadersOption = (value: unknown): value is browser.webRequest.OnBeforeSendHeadersOptions =>
 	Object.values<unknown>(browser.webRequest.OnBeforeSendHeadersOptions).includes(value)
 
@@ -5,7 +7,7 @@ export const isOnHeadersReceivedOption = (value: unknown): value is browser.webR
 	Object.values<unknown>(browser.webRequest.OnHeadersReceivedOptions).includes(value)
 
 export const logErrors = <A extends any[]>(func: (...args: A) => Promise<void>) => (...args: A): void => {
-	func(...args).catch(console.error)
+	Sentry.wrap(() => { func(...args).catch(console.error) })
 }
 
 class AssertionError extends Error {
