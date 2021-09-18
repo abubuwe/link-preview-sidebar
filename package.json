@@ -39,7 +39,7 @@
 		"@semantic-release/github": "^7.2.0",
 		"@sourcegraph/eslint-config": "^0.20.18",
 		"@sourcegraph/prettierrc": "^3.0.3",
-		"@types/chrome": "0.0.151",
+		"@types/chrome": "0.0.157",
 		"eslint": "^7.15.0",
 		"husky": "^4.3.0",
 		"parcel-bundler": "^1.12.4",
