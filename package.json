@@ -1,9 +1,5 @@
 {
-	"private": true,
-	"engines": {
-		"node": "^15.2.0",
-		"npm": "^7.0.8"
-	},
+
 	"scripts": {
 		"prettier": "prettier --check '**/*.{yml,ts,json}'",
 		"typecheck": "tsc -p .",
@@ -11,9 +7,6 @@
 		"eslint:fix": "eslint 'src/**/*.ts' --fix",
 		"build": "parcel build manifest.json --no-minify",
 		"watch": "parcel watch manifest.json --no-hmr",
-		"firefox:start": "web-ext run",
-		"firefox:build": "web-ext build --overwrite-dest",
-		"firefox:watch": "web-ext build --as-needed --overwrite-dest",
 		"semantic-release": "semantic-release"
 	},
 	"webExt": {
@@ -36,11 +29,9 @@
 	"dependencies": {
 		"@sentry/browser": "^6.12.0",
 		"@sentry/tracing": "^6.12.0",
-		"@types/webextension-polyfill": "^0.8.0",
 		"axios": "^0.21.1",
 		"dotenv": "^10.0.0",
-		"jsx-dom": "^6.4.23",
-		"webextension-polyfill": "^0.7.0"
+		"jsx-dom": "^6.4.23"
 	},
 	"devDependencies": {
 		"@commitlint/cli": "^11.0.0",
@@ -49,7 +40,6 @@
 		"@sourcegraph/eslint-config": "^0.20.18",
 		"@sourcegraph/prettierrc": "^3.0.3",
 		"@types/chrome": "0.0.151",
-		"@types/firefox-webext-browser": "^82.0.0",
 		"eslint": "^7.15.0",
 		"husky": "^4.3.0",
 		"parcel-bundler": "^1.12.4",
@@ -59,7 +49,6 @@
 		"semantic-release": "^17.3.0",
 		"semantic-release-chrome": "^1.1.3",
 		"semantic-release-firefox": "^2.0.3",
-		"typescript": "^4.1.2",
-		"web-ext": "^5.4.1"
+		"typescript": "^4.1.2"
 	}
 }
