@@ -71,7 +71,7 @@ browser.browserAction.onClicked.addListener(
 		console.log('function to be called')
 		const cbUrl = await getCrunchbaseUrl(tabDomain)
 
-		let linkUrl = new URL(browser.extension.getURL('./src/templates/company_not_found.html'))
+		let linkUrl = new URL(browser.runtime.getURL('./src/templates/company_not_found.html'))
 		if (cbUrl) {
 			linkUrl = new URL(cbUrl)
 		}

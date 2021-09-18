@@ -17,7 +17,7 @@ browser.runtime.onMessage.addListener(
 
 async function showSidebar(linkUrl: URL): Promise<void> {
 	let existingSidebar = document.querySelector('#link-preview-sidebar')
-	const embedderUrl = new URL(browser.extension.getURL('/src/templates/embedder.html'))
+	const embedderUrl = new URL(browser.runtime.getURL('/src/templates/embedder.html'))
 
 	if (!existingSidebar) {
 		const sidebar = <aside id="link-preview-sidebar" aria-label="Link preview" />
@@ -36,7 +36,7 @@ async function showSidebar(linkUrl: URL): Promise<void> {
 
 		sidebar.attachShadow({ mode: 'open', delegatesFocus: true }).append(
 			<>
-				<link href={browser.extension.getURL('/src/templates/content.css')} rel="stylesheet" />
+				<link href={browser.runtime.getURL('/src/templates/content.css')} rel="stylesheet" />
 				<div className="link-preview-top-bar">
 					<a
 						id="link-preview-link"
