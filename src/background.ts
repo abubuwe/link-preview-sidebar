@@ -58,7 +58,7 @@ async function getCrunchbaseUrl(domain: string) {
 	}
 }
 
-browser.browserAction.onClicked.addListener(
+chrome.browserAction.onClicked.addListener(
 	logErrors(async tab => {
 
 		console.log('Browser action invoked', { tab })
@@ -71,7 +71,7 @@ browser.browserAction.onClicked.addListener(
 		console.log('function to be called')
 		const cbUrl = await getCrunchbaseUrl(tabDomain)
 
-		let linkUrl = new URL(browser.runtime.getURL('./src/templates/company_not_found.html'))
+		let linkUrl = new URL(chrome.runtime.getURL('./src/templates/company_not_found.html'))
 		if (cbUrl) {
 			linkUrl = new URL(cbUrl)
 		}
@@ -79,12 +79,12 @@ browser.browserAction.onClicked.addListener(
 		allowIframe(tab, linkUrl)
 
 		console.log('Executing content script')
-		await browser.tabs.executeScript({ file: '/src/content.js' })
+		await chrome.tabs.executeScript({ file: '/src/content.js' })
 		const message: PreviewMessage = {
 			method: 'preview',
 			linkUrl: linkUrl.href,
 		}
-		await browser.tabs.sendMessage(tab.id, message)
+		await chrome.tabs.sendMessage(tab.id, message)
 	})
 )
 
@@ -98,7 +98,7 @@ const iframeAllowEntryKey = (tabId: number, sourceUrl: Readonly<URL>): string =>
 
 // Register message listener to support alt-clicking links
 // eslint-disable-next-line @typescript-eslint/require-await
-browser.runtime.onMessage.addListener(async (message: Message, sender) => {
+chrome.runtime.onMessage.addListener(async (message: Message, sender) => {
 	assert(sender.tab, 'Expected sender to have tab')
 	const linkUrl = new URL(message.linkUrl)
 	switch (message.method) {
@@ -136,7 +136,7 @@ function urlWithoutHash(url: Readonly<URL>): Readonly<URL> {
  * @param tab The tab the iframe is contained in.
  * @param sourceUrl The `src` URL of the iframe to allow.
  */
-function allowIframe(tab: browser.tabs.Tab, sourceUrl: Readonly<URL>): void {
+function allowIframe(tab: chrome.tabs.Tab, sourceUrl: Readonly<URL>): void {
 	// The hash is dropped for webRequests and will cause the filter to never match.
 	const filterUrl = urlWithoutHash(sourceUrl)
 
@@ -232,7 +232,7 @@ function allowIframe(tab: browser.tabs.Tab, sourceUrl: Readonly<URL>): void {
 		console.log('Removing webRequest listeners')
 		browser.webRequest.onHeadersReceived.removeListener(onHeadersReceivedListener)
 		browser.webRequest.onBeforeSendHeaders.removeListener(onBeforeSendHeadersListener)
-		browser.tabs.onRemoved.removeListener(tabClosedListener)
+		chrome.tabs.onRemoved.removeListener(tabClosedListener)
 		allowedIframes.delete(key)
 	}
 	allowedIframes.set(key, disallow)
@@ -244,7 +244,7 @@ function allowIframe(tab: browser.tabs.Tab, sourceUrl: Readonly<URL>): void {
 			disallow()
 		}
 	}
-	browser.tabs.onRemoved.addListener(tabClosedListener)
+	chrome.tabs.onRemoved.addListener(tabClosedListener)
 }
 
 interface CspDirective {
