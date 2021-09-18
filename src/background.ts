@@ -145,7 +145,7 @@ function allowIframe(tab: chrome.tabs.Tab, sourceUrl: Readonly<URL>): void {
 
 	// Narrowly scope to only the requested URL in frames in the
 	// requested tab to not losen security more than necessary.
-	const requestFilter: browser.webRequest.RequestFilter = {
+	const requestFilter: chrome.webRequest.RequestFilter = {
 		tabId: tab.id,
 		urls: [filterUrl.href],
 		types: ['sub_frame'],
@@ -157,14 +157,14 @@ function allowIframe(tab: chrome.tabs.Tab, sourceUrl: Readonly<URL>): void {
 	}
 
 	const onBeforeSendHeadersListener = (
-		details: browser.webRequest._OnBeforeSendHeadersDetails
+		details: chrome.webRequest.WebRequestHeadersDetails
 		// eslint-disable-next-line unicorn/consistent-function-scoping
-	): browser.webRequest.BlockingResponse | undefined => {
+	): chrome.webRequest.BlockingResponse | undefined => {
 		console.log('onBeforeSendHeaders', details.url, details)
 		if (!details.requestHeaders) {
 			return
 		}
-		const response: browser.webRequest.BlockingResponse = {
+		const response: chrome.webRequest.BlockingResponse = {
 			requestHeaders: details.requestHeaders.filter(
 				// Do not reveal to the server that the page is being fetched into an iframe
 				header => header.name.toLowerCase() !== 'sec-fetch-dest'
@@ -175,7 +175,7 @@ function allowIframe(tab: chrome.tabs.Tab, sourceUrl: Readonly<URL>): void {
 	}
 	// To allow the link URL to be displayed in the iframe, we need to make sure the Sec-Fetch-Dest: iframe
 	// header does not get sent so the server does not reject the request.
-	browser.webRequest.onBeforeSendHeaders.addListener(
+	chrome.webRequest.onBeforeSendHeaders.addListener(
 		onBeforeSendHeadersListener,
 		requestFilter,
 		// Firefox does not support 'extraHeaders', Chrome needs it.
@@ -183,13 +183,13 @@ function allowIframe(tab: chrome.tabs.Tab, sourceUrl: Readonly<URL>): void {
 	)
 
 	const onHeadersReceivedListener = (
-		details: browser.webRequest._OnHeadersReceivedDetails
-	): browser.webRequest.BlockingResponse | undefined => {
+		details: chrome.webRequest.WebResponseHeadersDetails
+	): chrome.webRequest.BlockingResponse | undefined => {
 		console.log('onHeadersReceived', details.url, details)
 		if (!details.responseHeaders) {
 			return
 		}
-		const response: browser.webRequest.BlockingResponse = {
+		const response: chrome.webRequest.BlockingResponse = {
 			responseHeaders: details.responseHeaders
 				// To allow the link URL to be displayed in the iframe, we need to make sure its
 				// X-Frame-Option: deny header gets removed if present.
@@ -220,7 +220,7 @@ function allowIframe(tab: chrome.tabs.Tab, sourceUrl: Readonly<URL>): void {
 		console.log('filtered response', response)
 		return response
 	}
-	browser.webRequest.onHeadersReceived.addListener(
+	chrome.webRequest.onHeadersReceived.addListener(
 		onHeadersReceivedListener,
 		requestFilter,
 		// Firefox does not support 'extraHeaders', Chrome needs it.
@@ -230,8 +230,8 @@ function allowIframe(tab: chrome.tabs.Tab, sourceUrl: Readonly<URL>): void {
 	/** Removes listeners again */
 	function disallow(): void {
 		console.log('Removing webRequest listeners')
-		browser.webRequest.onHeadersReceived.removeListener(onHeadersReceivedListener)
-		browser.webRequest.onBeforeSendHeaders.removeListener(onBeforeSendHeadersListener)
+		chrome.webRequest.onHeadersReceived.removeListener(onHeadersReceivedListener)
+		chrome.webRequest.onBeforeSendHeaders.removeListener(onBeforeSendHeadersListener)
 		chrome.tabs.onRemoved.removeListener(tabClosedListener)
 		allowedIframes.delete(key)
 	}
