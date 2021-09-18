@@ -56,7 +56,7 @@ async function getCrunchbaseUrl(domain: string) {
 	}
 }
 
-chrome.browserAction.onClicked.addListener(
+chrome.action.onClicked.addListener(
 	logErrors(async tab => {
 
 		console.log('Browser action invoked', { tab })
@@ -77,7 +77,7 @@ chrome.browserAction.onClicked.addListener(
 		allowIframe(tab, linkUrl)
 
 		console.log('Executing content script')
-		await chrome.tabs.executeScript({ file: '/src/content.js' })
+		await chrome.scripting.executeScript({ target: {tabId: tab.id}, files: ['/src/content.js'] })
 		const message: PreviewMessage = {
 			method: 'preview',
 			linkUrl: linkUrl.href,
