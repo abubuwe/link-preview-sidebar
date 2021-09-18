@@ -4,7 +4,7 @@ import { h, Fragment, SVGProps } from 'jsx-dom'
 import { logErrors } from './util'
 import { AllowIframeMessage, DisallowIframeMessage, Message, PreviewMessage } from './util/messages'
 
-browser.runtime.onMessage.addListener(
+chrome.runtime.onMessage.addListener(
 	logErrors(async (message: Message) => {
 		switch (message.method) {
 			case 'preview': {
@@ -17,7 +17,7 @@ browser.runtime.onMessage.addListener(
 
 async function showSidebar(linkUrl: URL): Promise<void> {
 	let existingSidebar = document.querySelector('#link-preview-sidebar')
-	const embedderUrl = new URL(browser.runtime.getURL('/src/templates/embedder.html'))
+	const embedderUrl = new URL(chrome.runtime.getURL('/src/templates/embedder.html'))
 
 	if (!existingSidebar) {
 		const sidebar = <aside id="link-preview-sidebar" aria-label="Link preview" />
@@ -30,13 +30,13 @@ async function showSidebar(linkUrl: URL): Promise<void> {
 					method: 'disallowIframe',
 					linkUrl: linkUrl.href,
 				}
-				await browser.runtime.sendMessage(message)
+				await chrome.runtime.sendMessage(message)
 			}
 		)
 
 		sidebar.attachShadow({ mode: 'open', delegatesFocus: true }).append(
 			<>
-				<link href={browser.runtime.getURL('/src/templates/content.css')} rel="stylesheet" />
+				<link href={chrome.runtime.getURL('/src/templates/content.css')} rel="stylesheet" />
 				<div className="link-preview-top-bar">
 					<a
 						id="link-preview-link"
