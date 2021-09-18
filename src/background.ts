@@ -4,8 +4,6 @@ dotenv.config();
 import * as Sentry from '@sentry/browser';
 import { Integrations } from '@sentry/tracing';
 
-import './polyfill'
-
 import { assert, isOnBeforeSendHeadersOption, isOnHeadersReceivedOption, logErrors } from './util'
 import { Message, PreviewMessage } from './util/messages'
 

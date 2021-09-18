@@ -1,5 +1,3 @@
-import './polyfill'
-
 import { h, Fragment, SVGProps } from 'jsx-dom'
 import { logErrors } from './util'
 import { AllowIframeMessage, DisallowIframeMessage, Message, PreviewMessage } from './util/messages'
