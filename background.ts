@@ -1,4 +1,4 @@
-import axios from 'axios';
+// import axios from 'axios';
 // import * as Sentry from '@sentry/browser';
 // import { Integrations } from '@sentry/tracing';
 
@@ -19,38 +19,39 @@ import { Message, PreviewMessage } from './src/util/messages'
 
 async function getCrunchbaseUrl(domain: string) {
 	console.log('function started')
-	const response = await axios.post('https://api.crunchbase.com/api/v4/searches/organizations', 
-	{
-		'field_ids': [
-			'identifier',
-			'location_identifiers',
-			'short_description',
-			'rank_org'
-		],
-		'order': [
-			{
-				'field_id': 'rank_org',
-				'sort': 'asc'
-			}
-		],
-		'query': [
-			{
-				'type': 'predicate',
-				'field_id': 'website_url',
-				'operator_id': 'domain_eq',
-				'values': [
-					domain
-				]
-			}
-		],
-		'limit': 50
-	},
-	{
-		headers: { 'X-cb-user-key':  process.env.CB_API_KEY },
-	});
-	console.log(response);
-	if (response.data.count === 1) {
-		return `https://www.crunchbase.com/organization/${response.data.entities[0].properties.identifier.permalink}`
+	const options = {
+		method: 'POST',
+		body: JSON.stringify({
+			'field_ids': [
+				'identifier',
+				'location_identifiers',
+				'short_description',
+				'rank_org'
+			],
+			'order': [
+				{
+					'field_id': 'rank_org',
+					'sort': 'asc'
+				}
+			],
+			'query': [
+				{
+					'type': 'predicate',
+					'field_id': 'website_url',
+					'operator_id': 'domain_eq',
+					'values': [
+						domain
+					]
+				}
+			],
+			'limit': 50
+		}),
+		headers: { 'X-cb-user-key':  process.env.CB_API_KEY! },
+	}
+	const data = await (await fetch('https://api.crunchbase.com/api/v4/searches/organizations', options)).json()
+	console.log(data);
+	if (data.count === 1) {
+		return `https://www.crunchbase.com/organization/${data.entities[0].properties.identifier.permalink}`
 	}
 }
 

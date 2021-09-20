@@ -29,7 +29,6 @@
 	"dependencies": {
 		"@sentry/browser": "^6.12.0",
 		"@sentry/tracing": "^6.12.0",
-		"axios": "^0.21.1",
 		"dotenv": "^10.0.0",
 		"jsx-dom": "^6.4.23"
 	},
