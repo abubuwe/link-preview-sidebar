@@ -3,7 +3,7 @@
 	"name": "MMC Crunchbase Extension",
 	"description": "Preview Crunchbase profile for companies in a sidebar",
 	"version": "0.2.0",
-	"permissions": ["activeTab", "storage", "webRequest", "webRequestBlocking", "tabs", "scripting"],
+	"permissions": ["activeTab", "storage", "webRequest", "tabs", "scripting"],
 	"host_permissions": ["*://*/*"],
 	"icons": {
 		"128": "/images/icon.png"
@@ -22,6 +22,6 @@
 		}
 	],
 	"background": {
-		"service_worker": "src/background.ts"
+		"service_worker": "background.ts"
 	}
 }

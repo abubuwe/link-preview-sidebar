@@ -1,21 +1,19 @@
 import axios from 'axios';
-import dotenv from 'dotenv';
-dotenv.config();
-import * as Sentry from '@sentry/browser';
-import { Integrations } from '@sentry/tracing';
+// import * as Sentry from '@sentry/browser';
+// import { Integrations } from '@sentry/tracing';
 
-import { assert, isOnBeforeSendHeadersOption, isOnHeadersReceivedOption, logErrors } from './util'
-import { Message, PreviewMessage } from './util/messages'
+import { assert, isOnBeforeSendHeadersOption, isOnHeadersReceivedOption, logErrors } from './src/util'
+import { Message, PreviewMessage } from './src/util/messages'
 
-Sentry.init({
-  dsn: 'https://feec4ec7d262475e949108f183408506@o982691.ingest.sentry.io/5939619',
-  integrations: [new Integrations.BrowserTracing()],
+// Sentry.init({
+//   dsn: 'https://feec4ec7d262475e949108f183408506@o982691.ingest.sentry.io/5939619',
+//   integrations: [new Integrations.BrowserTracing()],
 
-  // Set tracesSampleRate to 1.0 to capture 100%
-  // of transactions for performance monitoring.
-  // We recommend adjusting this value in production
-  tracesSampleRate: 1.0,
-});
+//   // Set tracesSampleRate to 1.0 to capture 100%
+//   // of transactions for performance monitoring.
+//   // We recommend adjusting this value in production
+//   tracesSampleRate: 1.0,
+// });
 
 // TODO: Take 1st word on page and search
 
