@@ -129,6 +129,14 @@ function urlWithoutHash(url: Readonly<URL>): Readonly<URL> {
 	return noHash
 }
 
+console.log(chrome.extension.getURL(''))
+
+chrome.declarativeNetRequest.onRuleMatchedDebug.addListener(
+	function(info) {
+		console.log("Rule matched", info)
+	}	
+)
+
 /**
  * Registers `webRequest` interceptors  to make sure the specific given URL is allowed to be displayed in an iframe
  * in the given specific tab, for the lifetime of the tab.
@@ -145,6 +153,7 @@ function allowIframe(tab: browser.tabs.Tab, sourceUrl: Readonly<URL>): void {
 
 	// Narrowly scope to only the requested URL in frames in the
 	// requested tab to not losen security more than necessary.
+	console.log("href", filterUrl.href)
 	const requestFilter: browser.webRequest.RequestFilter = {
 		tabId: tab.id,
 		urls: [filterUrl.href],
@@ -156,82 +165,9 @@ function allowIframe(tab: browser.tabs.Tab, sourceUrl: Readonly<URL>): void {
 		return
 	}
 
-	const onBeforeSendHeadersListener = (
-		details: browser.webRequest._OnBeforeSendHeadersDetails
-		// eslint-disable-next-line unicorn/consistent-function-scoping
-	): browser.webRequest.BlockingResponse | undefined => {
-		console.log('onBeforeSendHeaders', details.url, details)
-		if (!details.requestHeaders) {
-			return
-		}
-		const response: browser.webRequest.BlockingResponse = {
-			requestHeaders: details.requestHeaders.filter(
-				// Do not reveal to the server that the page is being fetched into an iframe
-				header => header.name.toLowerCase() !== 'sec-fetch-dest'
-			),
-		}
-		console.log('filtered request', response)
-		return response
-	}
-	// To allow the link URL to be displayed in the iframe, we need to make sure the Sec-Fetch-Dest: iframe
-	// header does not get sent so the server does not reject the request.
-	browser.webRequest.onBeforeSendHeaders.addListener(
-		onBeforeSendHeadersListener,
-		requestFilter,
-		// Firefox does not support 'extraHeaders', Chrome needs it.
-		['blocking', 'requestHeaders', 'extraHeaders'].filter(isOnBeforeSendHeadersOption)
-	)
-
-	const onHeadersReceivedListener = (
-		details: browser.webRequest._OnHeadersReceivedDetails
-	): browser.webRequest.BlockingResponse | undefined => {
-		console.log('onHeadersReceived', details.url, details)
-		if (!details.responseHeaders) {
-			return
-		}
-		const response: browser.webRequest.BlockingResponse = {
-			responseHeaders: details.responseHeaders
-				// To allow the link URL to be displayed in the iframe, we need to make sure its
-				// X-Frame-Option: deny header gets removed if present.
-				.filter(header => header.name.toLowerCase() !== 'x-frame-options')
-				// If the server returns a CSP with frame-ancestor restrictions,
-				// add the tab's URL to allowed frame ancestors.
-				.map(header => {
-					const name = header.name.toLowerCase()
-					assert(tab.url, 'Expected tab to have URL')
-					if (name === 'content-security-policy' && header.value) {
-						const cspDirectives = parseCsp(header.value)
-						const frameAncestorsDirective = cspDirectives.find(
-							directive => directive.name === 'frame-ancestors'
-						)
-						if (!frameAncestorsDirective) {
-							return header
-						}
-						frameAncestorsDirective.values = [
-							...frameAncestorsDirective.values.filter(value => value !== "'none'"),
-							new URL(tab.url).origin,
-						]
-						const updatedCsp = serializeCsp(cspDirectives)
-						return { name: header.name, value: updatedCsp }
-					}
-					return header
-				}),
-		}
-		console.log('filtered response', response)
-		return response
-	}
-	browser.webRequest.onHeadersReceived.addListener(
-		onHeadersReceivedListener,
-		requestFilter,
-		// Firefox does not support 'extraHeaders', Chrome needs it.
-		['blocking', 'responseHeaders', 'extraHeaders'].filter(isOnHeadersReceivedOption)
-	)
-
 	/** Removes listeners again */
 	function disallow(): void {
 		console.log('Removing webRequest listeners')
-		browser.webRequest.onHeadersReceived.removeListener(onHeadersReceivedListener)
-		browser.webRequest.onBeforeSendHeaders.removeListener(onBeforeSendHeadersListener)
 		browser.tabs.onRemoved.removeListener(tabClosedListener)
 		allowedIframes.delete(key)
 	}
