@@ -4,7 +4,7 @@
 	"json.schemas": [
 		{
 			"fileMatch": ["manifest.json"],
-			"url": "https://json.schemastore.org/webextension",
-		},
-	],
+			"url": "https://json.schemastore.org/webextension"
+		}
+	]
 }

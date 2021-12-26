@@ -11,8 +11,8 @@
 			"isBackground": true,
 			"group": "build",
 			"runOptions": {
-				"runOn": "folderOpen",
-			},
+				"runOn": "folderOpen"
+			}
 		},
 		{
 			"label": "Parcel watch",
@@ -23,8 +23,8 @@
 			"group": "build",
 			"problemMatcher": [],
 			"runOptions": {
-				"runOn": "folderOpen",
-			},
+				"runOn": "folderOpen"
+			}
 		}
-	],
+	]
 }
