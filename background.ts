@@ -2,7 +2,7 @@
 // import * as Sentry from '@sentry/browser';
 // import { Integrations } from '@sentry/tracing';
 
-import { assert, isOnBeforeSendHeadersOption, isOnHeadersReceivedOption, logErrors } from './src/util'
+import { assert, logErrors } from './src/util'
 import { Message, PreviewMessage } from './src/util/messages'
 
 // Sentry.init({
@@ -141,11 +141,6 @@ function allowIframe(tab: chrome.tabs.Tab, sourceUrl: Readonly<URL>): void {
 	// Narrowly scope to only the requested URL in frames in the
 	// requested tab to not losen security more than necessary.
 	console.log('href', filterUrl.href)
-	const requestFilter: chrome.webRequest.RequestFilter = {
-		tabId: tab.id,
-		urls: [filterUrl.href],
-		types: ['sub_frame'],
-	}
 	const key = iframeAllowEntryKey(tab.id, filterUrl)
 	if (allowedIframes.has(key)) {
 		console.log('iframe already allowed', tab.id, filterUrl.href)
@@ -168,23 +163,4 @@ function allowIframe(tab: chrome.tabs.Tab, sourceUrl: Readonly<URL>): void {
 		}
 	}
 	chrome.tabs.onRemoved.addListener(tabClosedListener)
-}
-
-interface CspDirective {
-	name: string
-	values: string[]
-}
-
-function parseCsp(csp: string): CspDirective[] {
-	return csp.split(/\s*;\s*/).map(directive => {
-		const [name, ...values] = directive.split(/\s+/)
-		if (!name) {
-			throw new Error(`Invalid CSP directive: ${directive}`)
-		}
-		return { name, values }
-	})
-}
-
-function serializeCsp(cspDirectives: CspDirective[]): string {
-	return cspDirectives.map(({ name, values }) => [name, ...values].join(' ')).join('; ')
 }
