@@ -29,15 +29,7 @@ jobs:
         with:
           name: link-preview-sidebar-chrome
           path: link-preview-sidebar-chrome.zip
-      - run: zip -r link-preview-sidebar-firefox.xpi dist
-        if: always()
-      - name: Upload Firefox artifact
-        if: always()
-        uses: actions/upload-artifact@v2
-        with:
-          name: link-preview-sidebar-firefox
-          path: link-preview-sidebar-firefox.xpi
-      # Release to Chrome and Firefox store on release branch
+      # Release to Chrome store on release branch
       - name: release
         if: github.event_name == 'push' && github.ref == 'refs/heads/release'
         env:
@@ -46,7 +38,4 @@ jobs:
           # GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           # GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
           # GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
-          # Firefox addons store
-          FIREFOX_EMAIL: ${{ secrets.FIREFOX_EMAIL }}
-          FIREFOX_PASSWORD: ${{ secrets.FIREFOX_PASSWORD }}
         run: npm run semantic-release

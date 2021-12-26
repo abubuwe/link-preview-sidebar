@@ -1,10 +1,18 @@
 {
-	"extends": "@sourcegraph/eslint-config",
 	"parserOptions": {
 		"project": "tsconfig.json"
 	},
+	"plugins": ["@typescript-eslint", "prettier"],
+	"extends": [
+		"eslint:recommended",
+		"plugin:@typescript-eslint/eslint-recommended",
+		"plugin:@typescript-eslint/recommended",
+		"prettier"
+	],
 	"rules": {
 		"react/react-in-jsx-scope": "off",
-		"react/jsx-no-target-blank": "off"
+		"react/jsx-no-target-blank": "off",
+		"no-console": 1,
+		"prettier/prettier": 2
 	}
 }

@@ -11,8 +11,8 @@
 			"isBackground": true,
 			"group": "build",
 			"runOptions": {
-				"runOn": "folderOpen",
-			},
+				"runOn": "folderOpen"
+			}
 		},
 		{
 			"label": "Parcel watch",
@@ -23,17 +23,8 @@
 			"group": "build",
 			"problemMatcher": [],
 			"runOptions": {
-				"runOn": "folderOpen",
-			},
-		},
-		{
-			"label": "Firefox watch",
-			"detail": "Watch files and build Firefox extension ZIP on file changes",
-			"type": "npm",
-			"script": "firefox:watch",
-			"group": "build",
-			"problemMatcher": [],
-			"isBackground": true,
-		},
-	],
+				"runOn": "folderOpen"
+			}
+		}
+	]
 }

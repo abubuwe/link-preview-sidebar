@@ -16,8 +16,8 @@
 		"skipDefaultLibCheck": true,
 		"noUncheckedIndexedAccess": true,
 		"paths": {
-			"*": ["./src/types/*", "./*"],
-		},
+			"*": ["./src/types/*", "./*"]
+		}
 	},
-	"include": ["src/**/*", "background.ts"],
+	"include": ["src/**/*", "background.ts"]
 }
