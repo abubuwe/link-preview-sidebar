@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "priority": 1,
+    "action": {
+      "type": "modifyHeaders",
+      "requestHeaders": [{
+        "header": "sec-fetch-dest",
+        "operation": "remove"
+      }]
+    },
+    "condition": {
+      "isUrlFilterCaseSensitive": false,
+      "regexFilter": "^https://www.crunchbase.com/.*",
+      "resourceTypes": [
+        "sub_frame"
+      ]
+    }
+  },
+  {
+    "id": 2,
+    "priority": 1,
+    "action": {
+      "type": "modifyHeaders",
+      "responseHeaders": [{
+        "header": "X-Frame-Options",
+        "operation": "remove"
+      }]
+    },
+    "condition": {
+      "isUrlFilterCaseSensitive": false,
+      "regexFilter": "^https://www.crunchbase.com/.*",
+      "resourceTypes": [
+        "sub_frame"
+      ]
+    }
+  }
+]
