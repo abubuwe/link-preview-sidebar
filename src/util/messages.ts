@@ -10,4 +10,7 @@ export interface DisallowIframeMessage {
 	method: 'disallowIframe'
 	linkUrl: string
 }
-export type Message = PreviewMessage | AllowIframeMessage | DisallowIframeMessage
+export type Message =
+	| PreviewMessage
+	| AllowIframeMessage
+	| DisallowIframeMessage

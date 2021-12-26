@@ -22,7 +22,12 @@ async function getCrunchbaseUrl(domain: string) {
 	const options = {
 		method: 'POST',
 		body: JSON.stringify({
-			field_ids: ['identifier', 'location_identifiers', 'short_description', 'rank_org'],
+			field_ids: [
+				'identifier',
+				'location_identifiers',
+				'short_description',
+				'rank_org',
+			],
 			order: [
 				{
 					field_id: 'rank_org',
@@ -41,7 +46,12 @@ async function getCrunchbaseUrl(domain: string) {
 		}),
 		headers: { 'X-cb-user-key': process.env.CB_API_KEY! },
 	}
-	const data = await (await fetch('https://api.crunchbase.com/api/v4/searches/organizations', options)).json()
+	const data = await (
+		await fetch(
+			'https://api.crunchbase.com/api/v4/searches/organizations',
+			options
+		)
+	).json()
 	console.log(data)
 	if (data.count === 1) {
 		return `https://www.crunchbase.com/organization/${data.entities[0].properties.identifier.permalink}`
@@ -49,7 +59,7 @@ async function getCrunchbaseUrl(domain: string) {
 }
 
 chrome.action.onClicked.addListener(
-	logErrors(async tab => {
+	logErrors(async (tab) => {
 		console.log('Browser action invoked', { tab })
 		assert(tab?.id != null, 'Expected tab with ID')
 		if (!tab.url) {
@@ -60,7 +70,9 @@ chrome.action.onClicked.addListener(
 		console.log('function to be called')
 		const cbUrl = await getCrunchbaseUrl(tabDomain)
 
-		let linkUrl = new URL(chrome.runtime.getURL('./src/templates/company_not_found.html'))
+		let linkUrl = new URL(
+			chrome.runtime.getURL('./src/templates/company_not_found.html')
+		)
 		if (cbUrl) {
 			linkUrl = new URL(cbUrl)
 		}
@@ -68,7 +80,10 @@ chrome.action.onClicked.addListener(
 		allowIframe(tab, linkUrl)
 
 		console.log('Executing content script')
-		await chrome.scripting.executeScript({ target: { tabId: tab.id }, files: ['/src/content.js'] })
+		await chrome.scripting.executeScript({
+			target: { tabId: tab.id },
+			files: ['/src/content.js'],
+		})
 		const message: PreviewMessage = {
 			method: 'preview',
 			linkUrl: linkUrl.href,
