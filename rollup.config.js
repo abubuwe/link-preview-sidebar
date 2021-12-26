@@ -8,9 +8,10 @@ import typescript from '@rollup/plugin-typescript'
 
 import { chromeExtension, simpleReloader } from 'rollup-plugin-chrome-extension'
 import { emptyDir } from 'rollup-plugin-empty-dir'
-import zip from 'rollup-plugin-zip'
+// import zip from 'rollup-plugin-zip'
 import replace from '@rollup/plugin-replace'
-import json from '@rollup/plugin-json'
+// import json from '@rollup/plugin-json'
+import copy from 'rollup-plugin-cpy'
 
 const isProduction = process.env.NODE_ENV === 'production'
 
@@ -34,9 +35,12 @@ export default {
     resolve({browser: true}),
     commonjs(),
     typescript(),
-    // Empties the output dir before a new build
     emptyDir(),
+    copy([
+      { files: 'rules.json', dest: './dist/' },
+    ]),
     // Outputs a zip file in ./releases
-    isProduction && zip({ dir: 'releases' }),
+    // isProduction && zip({ dir: 'releases' }),
+    // Empties the output dir before a new build
   ],
 }
