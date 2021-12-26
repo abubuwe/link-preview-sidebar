@@ -4,7 +4,7 @@
 		"module": "ES2020",
 		"noEmit": true,
 		"moduleResolution": "node",
-		"rootDir": "src",
+		// "rootDir": "src",
 		"jsx": "react",
 		"jsxFactory": "h",
 		"jsxFragmentFactory": "Fragment",
@@ -19,5 +19,5 @@
 			"*": ["./src/types/*", "./*"],
 		},
 	},
-	"include": ["src/**/*"],
+	"include": ["src/**/*", "background.ts"],
 }

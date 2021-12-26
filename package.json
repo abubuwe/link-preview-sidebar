@@ -1,5 +1,4 @@
 {
-	"private": true,
 	"engines": {
 		"node": "^15.2.0",
 		"npm": "^7.0.8"
@@ -9,11 +8,9 @@
 		"typecheck": "tsc -p .",
 		"eslint": "eslint 'src/**/*.ts'",
 		"eslint:fix": "eslint 'src/**/*.ts' --fix",
-		"build": "parcel build manifest.json --no-minify",
-		"watch": "parcel watch manifest.json --no-hmr",
-		"firefox:start": "web-ext run",
-		"firefox:build": "web-ext build --overwrite-dest",
-		"firefox:watch": "web-ext build --as-needed --overwrite-dest",
+		"start": "rollup -c -w",
+		"build": "rollup -c",
+		"release": "NODE_ENV=production rollup -c",
 		"semantic-release": "semantic-release"
 	},
 	"webExt": {
@@ -23,43 +20,34 @@
 		"last 3 Chrome versions",
 		"last 3 Firefox versions"
 	],
-	"commitlint": {
-		"extends": [
-			"@commitlint/config-conventional"
-		]
-	},
-	"husky": {
-		"hooks": {
-			"commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-		}
-	},
 	"dependencies": {
 		"@sentry/browser": "^6.12.0",
 		"@sentry/tracing": "^6.12.0",
-		"@types/webextension-polyfill": "^0.8.0",
-		"axios": "^0.21.1",
 		"dotenv": "^10.0.0",
-		"jsx-dom": "^6.4.23",
-		"webextension-polyfill": "^0.7.0"
+		"jsx-dom": "^6.4.23"
 	},
 	"devDependencies": {
-		"@commitlint/cli": "^11.0.0",
-		"@commitlint/config-conventional": "^11.0.0",
+		"@rollup/plugin-alias": "^3.1.1",
+		"@rollup/plugin-commonjs": "^17.0.0",
+		"@rollup/plugin-json": "^4.1.0",
+		"@rollup/plugin-node-resolve": "^11.0.1",
+		"@rollup/plugin-replace": "^3.0.0",
+		"@rollup/plugin-typescript": "^8.1.0",
 		"@semantic-release/github": "^7.2.0",
 		"@sourcegraph/eslint-config": "^0.20.18",
 		"@sourcegraph/prettierrc": "^3.0.3",
-		"@types/chrome": "0.0.151",
-		"@types/firefox-webext-browser": "^82.0.0",
+		"@types/chrome": "0.0.157",
 		"eslint": "^7.15.0",
-		"husky": "^4.3.0",
-		"parcel-bundler": "^1.12.4",
-		"parcel-plugin-web-extension": "^1.6.1",
-		"parcel-plugin-wrapper": "^0.2.3",
-		"prettier": "^2.2.1",
+		"prettier": "^2.5.1",
+		"rollup": "^2.56.3",
+		"rollup-plugin-chrome-extension": "^3.6.1",
+		"rollup-plugin-cpy": "^2.0.1",
+		"rollup-plugin-empty-dir": "^1.0.5",
+		"rollup-plugin-zip": "^1.0.1",
 		"semantic-release": "^17.3.0",
 		"semantic-release-chrome": "^1.1.3",
 		"semantic-release-firefox": "^2.0.3",
-		"typescript": "^4.1.2",
-		"web-ext": "^5.4.1"
-	}
+		"typescript": "^4.1.2"
+	},
+	"name": "link-preview-sidebar"
 }

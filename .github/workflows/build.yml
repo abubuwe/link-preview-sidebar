@@ -15,6 +15,7 @@ jobs:
         with:
           node-version: '15.2.0'
       - run: npm ci
+      - run: npm ls
       - run: npm run prettier
       - run: npm run typecheck
       - run: npm run eslint
