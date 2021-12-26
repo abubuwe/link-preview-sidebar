@@ -1,4 +1,8 @@
 {
+	"engines": {
+		"node": "^15.2.0",
+		"npm": "^7.0.8"
+	},
 	"scripts": {
 		"prettier": "prettier --check '**/*.{yml,ts,json}'",
 		"typecheck": "tsc -p .",
@@ -16,16 +20,6 @@
 		"last 3 Chrome versions",
 		"last 3 Firefox versions"
 	],
-	"commitlint": {
-		"extends": [
-			"@commitlint/config-conventional"
-		]
-	},
-	"husky": {
-		"hooks": {
-			"commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-		}
-	},
 	"dependencies": {
 		"@sentry/browser": "^6.12.0",
 		"@sentry/tracing": "^6.12.0",
@@ -33,8 +27,6 @@
 		"jsx-dom": "^6.4.23"
 	},
 	"devDependencies": {
-		"@commitlint/cli": "^11.0.0",
-		"@commitlint/config-conventional": "^11.0.0",
 		"@rollup/plugin-alias": "^3.1.1",
 		"@rollup/plugin-commonjs": "^17.0.0",
 		"@rollup/plugin-json": "^4.1.0",
@@ -46,8 +38,7 @@
 		"@sourcegraph/prettierrc": "^3.0.3",
 		"@types/chrome": "0.0.157",
 		"eslint": "^7.15.0",
-		"husky": "^4.3.0",
-		"prettier": "^2.2.1",
+		"prettier": "^2.5.1",
 		"rollup": "^2.56.3",
 		"rollup-plugin-chrome-extension": "^3.6.1",
 		"rollup-plugin-cpy": "^2.0.1",
@@ -57,5 +48,6 @@
 		"semantic-release-chrome": "^1.1.3",
 		"semantic-release-firefox": "^2.0.3",
 		"typescript": "^4.1.2"
-	}
+	},
+	"name": "link-preview-sidebar"
 }

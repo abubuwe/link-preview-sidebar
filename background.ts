@@ -51,7 +51,7 @@ async function getCrunchbaseUrl(domain: string) {
 chrome.action.onClicked.addListener(
 	logErrors(async tab => {
 		console.log('Browser action invoked', { tab })
-		assert(tab?.id, 'Expected tab with ID')
+		assert(tab?.id != null, 'Expected tab with ID')
 		if (!tab.url) {
 			console.log('No tab url detected')
 			return
@@ -88,7 +88,7 @@ const iframeAllowEntryKey = (tabId: number, sourceUrl: Readonly<URL>): string =>
 // Register message listener to support alt-clicking links
 // eslint-disable-next-line @typescript-eslint/require-await
 chrome.runtime.onMessage.addListener(async (message: Message, sender) => {
-	assert(sender.tab, 'Expected sender to have tab')
+	assert(sender.tab != null, 'Expected sender to have tab')
 	const linkUrl = new URL(message.linkUrl)
 	switch (message.method) {
 		case 'allowIframe': {
@@ -136,7 +136,7 @@ function allowIframe(tab: chrome.tabs.Tab, sourceUrl: Readonly<URL>): void {
 	const filterUrl = urlWithoutHash(sourceUrl)
 
 	console.log('Allowing iframe', filterUrl.href, 'in tab', tab)
-	assert(tab.id, 'Expected tab to have ID')
+	assert(tab.id != null, 'Expected tab to have ID')
 
 	// Narrowly scope to only the requested URL in frames in the
 	// requested tab to not losen security more than necessary.
