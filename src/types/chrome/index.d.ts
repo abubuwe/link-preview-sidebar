@@ -3,12 +3,12 @@ declare namespace chrome {
 		export enum OnBeforeSendHeadersOptions {
 			'blocking',
 			'requestHeaders',
-			'extraHeaders'
+			'extraHeaders',
 		}
 		export enum OnHeadersReceivedOptions {
 			'blocking',
 			'responseHeaders',
-			'extraHeaders'
+			'extraHeaders',
 		}
 	}
 }

@@ -3,7 +3,15 @@
 	"name": "MMC Crunchbase Extension",
 	"description": "Preview Crunchbase profile for companies in a sidebar",
 	"version": "0.2.0",
-	"permissions": ["activeTab", "storage", "webRequest", "tabs", "scripting", "declarativeNetRequest", "declarativeNetRequestFeedback"],
+	"permissions": [
+		"activeTab",
+		"storage",
+		"webRequest",
+		"tabs",
+		"scripting",
+		"declarativeNetRequest",
+		"declarativeNetRequestFeedback"
+	],
 	"host_permissions": ["*://*/*"],
 	"icons": {
 		"128": "/images/icon.png"
@@ -14,12 +22,14 @@
 			"js": ["src/content.tsx"]
 		}
 	],
-	"declarative_net_request" : {
-		"rule_resources" : [{
-		  "id": "ruleset",
-		  "enabled": true,
-		  "path": "/rules.json"
-		}]
+	"declarative_net_request": {
+		"rule_resources": [
+			{
+				"id": "ruleset",
+				"enabled": true,
+				"path": "/rules.json"
+			}
+		]
 	},
 	"action": {},
 	"web_accessible_resources": [

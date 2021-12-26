@@ -22,34 +22,27 @@ async function getCrunchbaseUrl(domain: string) {
 	const options = {
 		method: 'POST',
 		body: JSON.stringify({
-			'field_ids': [
-				'identifier',
-				'location_identifiers',
-				'short_description',
-				'rank_org'
-			],
-			'order': [
+			field_ids: ['identifier', 'location_identifiers', 'short_description', 'rank_org'],
+			order: [
 				{
-					'field_id': 'rank_org',
-					'sort': 'asc'
-				}
+					field_id: 'rank_org',
+					sort: 'asc',
+				},
 			],
-			'query': [
+			query: [
 				{
-					'type': 'predicate',
-					'field_id': 'website_url',
-					'operator_id': 'domain_eq',
-					'values': [
-						domain
-					]
-				}
+					type: 'predicate',
+					field_id: 'website_url',
+					operator_id: 'domain_eq',
+					values: [domain],
+				},
 			],
-			'limit': 50
+			limit: 50,
 		}),
-		headers: { 'X-cb-user-key':  process.env.CB_API_KEY! },
+		headers: { 'X-cb-user-key': process.env.CB_API_KEY! },
 	}
 	const data = await (await fetch('https://api.crunchbase.com/api/v4/searches/organizations', options)).json()
-	console.log(data);
+	console.log(data)
 	if (data.count === 1) {
 		return `https://www.crunchbase.com/organization/${data.entities[0].properties.identifier.permalink}`
 	}
@@ -57,7 +50,6 @@ async function getCrunchbaseUrl(domain: string) {
 
 chrome.action.onClicked.addListener(
 	logErrors(async tab => {
-
 		console.log('Browser action invoked', { tab })
 		assert(tab?.id, 'Expected tab with ID')
 		if (!tab.url) {
@@ -72,11 +64,11 @@ chrome.action.onClicked.addListener(
 		if (cbUrl) {
 			linkUrl = new URL(cbUrl)
 		}
-		
+
 		allowIframe(tab, linkUrl)
 
 		console.log('Executing content script')
-		await chrome.scripting.executeScript({ target: {tabId: tab.id}, files: ['/src/content.js'] })
+		await chrome.scripting.executeScript({ target: { tabId: tab.id }, files: ['/src/content.js'] })
 		const message: PreviewMessage = {
 			method: 'preview',
 			linkUrl: linkUrl.href,
@@ -128,11 +120,9 @@ function urlWithoutHash(url: Readonly<URL>): Readonly<URL> {
 
 console.log(chrome.runtime.getURL(''))
 
-chrome.declarativeNetRequest.onRuleMatchedDebug.addListener(
-	function(info) {
-		console.log("Rule matched", info)
-	}	
-)
+chrome.declarativeNetRequest.onRuleMatchedDebug.addListener(function (info) {
+	console.log('Rule matched', info)
+})
 
 /**
  * Registers `webRequest` interceptors  to make sure the specific given URL is allowed to be displayed in an iframe
@@ -150,7 +140,7 @@ function allowIframe(tab: chrome.tabs.Tab, sourceUrl: Readonly<URL>): void {
 
 	// Narrowly scope to only the requested URL in frames in the
 	// requested tab to not losen security more than necessary.
-	console.log("href", filterUrl.href)
+	console.log('href', filterUrl.href)
 	const requestFilter: chrome.webRequest.RequestFilter = {
 		tabId: tab.id,
 		urls: [filterUrl.href],
