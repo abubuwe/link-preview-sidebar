@@ -13,9 +13,6 @@
 		"release": "NODE_ENV=production rollup -c",
 		"semantic-release": "semantic-release"
 	},
-	"webExt": {
-		"sourceDir": "./dist/"
-	},
 	"browserslist": [
 		"last 3 Chrome versions",
 		"last 3 Firefox versions"
@@ -46,7 +43,6 @@
 		"rollup-plugin-zip": "^1.0.1",
 		"semantic-release": "^17.3.0",
 		"semantic-release-chrome": "^1.1.3",
-		"semantic-release-firefox": "^2.0.3",
 		"typescript": "^4.1.2"
 	},
 	"name": "link-preview-sidebar"
